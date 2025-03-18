@@ -1,0 +1,1 @@
+Help me to design a good description, to have professional looking frontend with next.js in my tourism kiosk. I want a chatbot on the left, top right corner an offline navigation map, bottom right to show the navigation details
