@@ -314,6 +314,14 @@ body {
   @apply scale-95;
 }
 
+.speech-toggle-btn:disabled {
+  @apply opacity-60 cursor-not-allowed;
+}
+
+.speech-toggle-btn:disabled:hover {
+  @apply scale-100;
+}
+
 /* Enhanced message bubble styles */
 .message-bubble {
   @apply max-w-xs p-3 rounded-2xl transition-all duration-200 flex items-center gap-2;

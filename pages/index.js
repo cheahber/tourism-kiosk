@@ -17,12 +17,18 @@ export default function Home() {
     // Check if speech recognition is supported
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       setSpeechSupported(true);
+    } else {
+      console.warn('Speech recognition is not supported in this browser');
     }
 
     // Add speaking status listener
-    window.speechSynthesis.onvoiceschanged = () => {
-      window.speechSynthesis.getVoices();
-    };
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.getVoices();
+      };
+    } else {
+      console.warn('Speech synthesis is not supported in this browser');
+    }
   }, []);
 
   const startListening = () => {
@@ -140,23 +146,25 @@ export default function Home() {
                   </span>
                 )}
               </h2>
-              {speechSupported && (
-                <button
-                  onClick={startListening}
-                  className={`speech-toggle-btn flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200
-                    ${isListening 
-                      ? 'bg-red-500 text-white animate-pulse' 
-                      : 'bg-blue-50 text-blue-600 hover:bg-blue-100'}`}
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
-                          d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                  </svg>
-                  <span className="text-sm font-medium">
-                    {isListening ? 'Listening...' : 'Voice Input'}
-                  </span>
-                </button>
-              )}
+              <button
+                onClick={speechSupported ? startListening : () => {}}
+                disabled={!speechSupported}
+                title={!speechSupported ? "Speech recognition is not supported in this browser" : ""}
+                className={`speech-toggle-btn flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200
+                  ${isListening 
+                    ? 'bg-red-500 text-white animate-pulse' 
+                    : speechSupported 
+                      ? 'bg-blue-50 text-blue-600 hover:bg-blue-100'
+                      : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} 
+                        d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                </svg>
+                <span className="text-sm font-medium">
+                  {isListening ? 'Listening...' : 'Voice Input'}
+                </span>
+              </button>
             </div>
             <div className="flex items-center gap-2 mt-2">
               <span className="text-sm text-gray-500">💡 Tips:</span>
